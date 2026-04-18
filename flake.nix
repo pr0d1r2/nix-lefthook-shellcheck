@@ -42,6 +42,7 @@
           default = pkgs.mkShell {
             packages = [
               self.packages.${pkgs.stdenv.hostPlatform.system}.default
+              pkgs.shellcheck
               batsWithLibs
               pkgs.yamllint
               pkgs.git
