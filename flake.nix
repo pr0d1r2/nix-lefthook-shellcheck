@@ -69,6 +69,7 @@
               nix-lefthook-trailing-whitespace.packages.${pkgs.stdenv.hostPlatform.system}.default
               batsWithLibs
               pkgs.coreutils
+              pkgs.parallel
               pkgs.editorconfig-checker
               pkgs.typos
               pkgs.yamllint
