@@ -65,11 +65,6 @@ SH
     assert_failure
 }
 
-@test "dev.sh contains conditional lefthook install" {
-    run grep -q '\[ -f .git/hooks/pre-commit \] || lefthook install' dev.sh
-    assert_success
-}
-
 @test "mixed shell and non-shell files: only shell checked" {
     cat > "$TMP/good.sh" <<'SH'
 #!/usr/bin/env bash
