@@ -68,6 +68,7 @@
               nix-lefthook-missing-final-newline.packages.${pkgs.stdenv.hostPlatform.system}.default
               nix-lefthook-trailing-whitespace.packages.${pkgs.stdenv.hostPlatform.system}.default
               batsWithLibs
+              pkgs.coreutils
               pkgs.editorconfig-checker
               pkgs.typos
               pkgs.yamllint
