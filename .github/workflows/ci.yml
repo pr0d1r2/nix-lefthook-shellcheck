@@ -22,6 +22,6 @@ jobs:
       - name: Build
         run: nix build
       - name: Pre-commit checks
-        run: nix develop --command bash -c 'lefthook run pre-commit --all-files'
+        run: nix develop --pure --command bash -c 'lefthook run pre-commit --all-files'
       - name: Pre-push checks
-        run: nix develop --command bash -c 'lefthook run pre-push --all-files'
+        run: nix develop --pure --command bash -c 'lefthook run pre-push --all-files'
