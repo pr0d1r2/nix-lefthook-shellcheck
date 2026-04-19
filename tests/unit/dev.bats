@@ -3,14 +3,48 @@
 setup() {
     load "${BATS_LIB_PATH}/bats-support/load.bash"
     load "${BATS_LIB_PATH}/bats-assert/load.bash"
+
+    TMPDIR="$(mktemp -d)"
+    git init "$TMPDIR/repo" >/dev/null 2>&1
+    mkdir -p "$TMPDIR/repo/.git/hooks"
+    touch "$TMPDIR/repo/.git/hooks/pre-commit"
+
+    sed 's|@BATS_LIB_PATH@|/test/lib|' dev.sh > "$TMPDIR/dev.sh"
+
+    mkdir -p "$TMPDIR/bin"
+    cat > "$TMPDIR/bin/lefthook" <<'SH'
+#!/usr/bin/env bash
+echo "lefthook $*" >> "$LEFTHOOK_LOG"
+SH
+    chmod +x "$TMPDIR/bin/lefthook"
 }
 
-@test "dev.sh sets BATS_LIB_PATH" {
-    run grep -q 'export BATS_LIB_PATH=' dev.sh
-    assert_success
+teardown() {
+    rm -rf "$TMPDIR"
 }
 
-@test "dev.sh contains conditional lefthook install" {
-    run grep -q '\[ -f .git/hooks/pre-commit \] || lefthook install' dev.sh
+@test "sets BATS_LIB_PATH from placeholder" {
+    cd "$TMPDIR/repo"
+    run bash -c 'unset BATS_LIB_PATH; source "$1"; echo "$BATS_LIB_PATH"' -- "$TMPDIR/dev.sh"
     assert_success
+    assert_output "/test/lib/share/bats"
+}
+
+@test "runs lefthook install when hooks are missing" {
+    cd "$TMPDIR/repo"
+    rm "$TMPDIR/repo/.git/hooks/pre-commit"
+    export PATH="$TMPDIR/bin:$PATH"
+    export LEFTHOOK_LOG="$TMPDIR/log"
+    source "$TMPDIR/dev.sh"
+    assert [ -f "$LEFTHOOK_LOG" ]
+    run cat "$LEFTHOOK_LOG"
+    assert_output "lefthook install"
+}
+
+@test "skips lefthook install when hooks exist" {
+    cd "$TMPDIR/repo"
+    export PATH="$TMPDIR/bin:$PATH"
+    export LEFTHOOK_LOG="$TMPDIR/log"
+    source "$TMPDIR/dev.sh"
+    assert [ ! -f "$LEFTHOOK_LOG" ]
 }
