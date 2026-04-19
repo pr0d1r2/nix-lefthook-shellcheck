@@ -3,7 +3,7 @@ name: CI
 
 on:
   push:
-    branches: [main, CI-pass]
+    branches: [main]
   pull_request:
     branches: [main]
 
