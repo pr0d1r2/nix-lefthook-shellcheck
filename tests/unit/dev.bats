@@ -33,8 +33,11 @@ teardown() {
 @test "runs lefthook install when hooks are missing" {
     cd "$TMPDIR/repo"
     rm "$TMPDIR/repo/.git/hooks/pre-commit"
+    # shellcheck disable=SC2030
     export PATH="$TMPDIR/bin:$PATH"
+    # shellcheck disable=SC2030
     export LEFTHOOK_LOG="$TMPDIR/log"
+    # shellcheck disable=SC1091
     source "$TMPDIR/dev.sh"
     assert [ -f "$LEFTHOOK_LOG" ]
     run cat "$LEFTHOOK_LOG"
@@ -43,8 +46,11 @@ teardown() {
 
 @test "skips lefthook install when hooks exist" {
     cd "$TMPDIR/repo"
+    # shellcheck disable=SC2031
     export PATH="$TMPDIR/bin:$PATH"
+    # shellcheck disable=SC2031
     export LEFTHOOK_LOG="$TMPDIR/log"
+    # shellcheck disable=SC1091
     source "$TMPDIR/dev.sh"
     assert [ ! -f "$LEFTHOOK_LOG" ]
 }
