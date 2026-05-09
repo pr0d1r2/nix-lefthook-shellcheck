@@ -3,10 +3,10 @@ pre-commit:
   commands:
     shellcheck:
       glob: "*.{sh,bats}"
-      run: timeout ${LEFTHOOK_SHELLCHECK_TIMEOUT:-30} shellcheck {staged_files}
+      run: timeout ${LEFTHOOK_SHELLCHECK_TIMEOUT:-30} lefthook-shellcheck {staged_files}
 
 pre-push:
   commands:
     shellcheck:
       glob: "*.{sh,bats}"
-      run: timeout ${LEFTHOOK_SHELLCHECK_TIMEOUT:-30} shellcheck {push_files}
+      run: timeout ${LEFTHOOK_SHELLCHECK_TIMEOUT:-30} lefthook-shellcheck {push_files}
